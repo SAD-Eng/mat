@@ -1,0 +1,20 @@
+[build-system]
+requires = ['setuptools', 'setuptools-scm']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'memory_atlas'
+description = 'Memory Atlas Tooling'
+#readme = 'README.adoc'  # pip/PyPI does not support .adoc for the readme file
+requires-python = '>=3.8'
+license = { file = 'LICENSE' }
+classifiers = [
+    'Programming Language :: Python :: 3',
+]
+dependencies = [
+    'pyside6',
+]
+dynamic = ['version']
+
+[project.scripts]
+mat = 'memory_atlas.module:function'

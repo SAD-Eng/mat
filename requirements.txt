@@ -1,0 +1,5 @@
+-e git+ssh://git@gitlab.com/sad-eng/mat.git@47fd3c25e2dd4a4a806e52f4a1646933862ede78#egg=memory_atlas
+PySide6==6.4.1
+PySide6-Addons==6.4.1
+PySide6-Essentials==6.4.1
+shiboken6==6.4.1
