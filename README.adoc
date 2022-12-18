@@ -36,8 +36,6 @@ tomorrow need to be placed in Ethernet packets and sent to an external system,
 and the day after
 
 == Installation
-Note: Coming Soon!
-
 Some day soon we will have a PyPI package and/or Windows/Linux executable images.
 Until then, install by:
 
@@ -48,10 +46,15 @@ Until then, install by:
 . Activate the new virtual env in `env` with:
 .. `source env/bin/activate` on Linux
 .. `env\Scripts\activate` on Windows
-. `pip install -e .` to install this project w/ dependencies
+. `pip install -e .` to install this project as "editable"
+.. If the latest versions of dependencies cause problems, use
+`pip install -r requirements.txt` to get the last "known good" versions
 
 == Usage
 After installing dependencies, you can run the GUI with the `mat` command.
+
+If you did not install the project into your virtual environment, you can run
+the GUI with `python -m memory_atlas.editor`.
 
 == Support
 You can submit issues to the Jira issue tracker for this project:
