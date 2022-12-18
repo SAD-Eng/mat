@@ -1,3 +1,4 @@
 /.idea
 /env
 *.egg-info/
+*.pyc

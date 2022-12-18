@@ -17,4 +17,4 @@ dependencies = [
 dynamic = ['version']
 
 [project.scripts]
-mat = 'memory_atlas.module:function'
+mat = 'memory_atlas.editor.__main__:main'
