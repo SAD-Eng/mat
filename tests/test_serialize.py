@@ -4,12 +4,13 @@ from os import path
 
 from memory_atlas.models import SemVer, MemoryAtlas, BinaryObjectModel, BomVariable
 from memory_atlas.mat_json import MatJsonFile
+from memory_atlas.mat_types import PrimitiveType, Range
 
 def test_simple_atlas_serialize():
     atlas = MemoryAtlas()
     bom = BinaryObjectModel(name='foo', version=SemVer(1, 0, 0))
     atlas.boms.append(bom)
-    var = BomVariable(name='bar')
+    var = BomVariable(name='bar', description="haz", var_type = PrimitiveType.STRING)
     bom.variables.append(var)
 
     file = MatJsonFile('unused.txt', atlas)
@@ -32,7 +33,7 @@ def test_simple_atlas_round_trip():
     atlas = MemoryAtlas()
     bom = BinaryObjectModel(name='foo', version=SemVer(3,14,15))
     atlas.boms.append(bom)
-    var = BomVariable(name='bar')
+    var = BomVariable(name='bar', description="Haz", var_type=Range(0, 15))
     bom.variables.append(var)
 
     with tempfile.TemporaryDirectory() as tempdir_name:
