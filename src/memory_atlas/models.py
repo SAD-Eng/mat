@@ -18,7 +18,8 @@ class SemVer:
 class BomVariable:
     name                : str
     description         : str
-    var_type            : BuiltInTypes
+    #How do we want to reference a BOM model?
+    var_type            : Union[BuiltInTypes, str] 
     array               : bool = False
     array_bound_type    : ArrayBoundType = field(default_factory=lambda: ArrayBoundType.FIXED)
     var_array_bound     : Union[string, None] = None

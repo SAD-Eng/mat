@@ -16,8 +16,6 @@ def test_simple_atlas_serialize():
     file = MatJsonFile('unused.txt', atlas)
     json_dict = json.loads(file.serialize())
 
-    print(file.serialize())
-
     assert len(json_dict['boms']) == 1
     assert json_dict['boms'][0]['name'] == bom.name
     assert len(json_dict['boms'][0]['variables']) == 1
