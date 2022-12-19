@@ -1,21 +1,25 @@
+from __future__ import annotations
+from dataclasses import dataclass, field
 
+@dataclass
+class SemVer:
+  major : int = 0
+  minor : int = 0
+  patch : int = 0
 
+@dataclass 
 class MemoryAtlas:
-    def __init__(self):
-        self.boms = []  # list of BinaryObjectModel
+  def __init__(self):
+    self.boms = []  # list of BinaryObjectModel
 
-
-class BinaryObjectModel:
-    def __init__(self, name):
-        self.name = name
-        self.variables = []  # list of BomVariable
-
-
+@dataclass
 class BomVariable:
-    def __init__(self, name, version_major, version_minor):
-        self.name = name
-        self.description = ''
-        self.version_major = version_major
-        self.version_minor = version_minor
-        self.version_patch = 0
+    name : str
+    description : str = "TBD"
 
+@dataclass
+class BinaryObjectModel:
+    name : str
+    description : str = "TBD"
+    version : SemVer = field(default_factory=SemVer)
+    variables : list[BomVariable] = field(default_factory=list)

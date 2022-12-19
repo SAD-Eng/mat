@@ -2,34 +2,37 @@ import json
 import tempfile
 from os import path
 
-from memory_atlas.models import MemoryAtlas, BinaryObjectModel, BomVariable
+from memory_atlas.models import SemVer, MemoryAtlas, BinaryObjectModel, BomVariable
 from memory_atlas.mat_json import MatJsonFile
-
 
 def test_simple_atlas_serialize():
     atlas = MemoryAtlas()
-    bom = BinaryObjectModel(name='foo')
+    bom = BinaryObjectModel(name='foo', version=SemVer(1, 0, 0))
     atlas.boms.append(bom)
-    var = BomVariable(name='bar', version_major=1, version_minor=0)
+    var = BomVariable(name='bar')
     bom.variables.append(var)
 
     file = MatJsonFile('unused.txt', atlas)
     json_dict = json.loads(file.serialize())
+
+    print(file.serialize())
 
     assert len(json_dict['boms']) == 1
     assert json_dict['boms'][0]['name'] == bom.name
     assert len(json_dict['boms'][0]['variables']) == 1
     var_obj = json_dict['boms'][0]['variables'][0]
     assert var_obj['name'] == var.name
-    assert var_obj['version_major'] == var.version_major
-    assert var_obj['version_minor'] == var.version_minor
-
-
+    
+    bom_version = json_dict['boms'][0]['version']    
+    assert bom_version['major'] == bom.version.major
+    assert bom_version['minor'] == bom.version.minor
+    assert bom_version['patch'] == bom.version.patch
+    
 def test_simple_atlas_round_trip():
     atlas = MemoryAtlas()
-    bom = BinaryObjectModel(name='foo')
+    bom = BinaryObjectModel(name='foo', version=SemVer(3,14,15))
     atlas.boms.append(bom)
-    var = BomVariable(name='bar', version_major=1, version_minor=0)
+    var = BomVariable(name='bar')
     bom.variables.append(var)
 
     with tempfile.TemporaryDirectory() as tempdir_name:
