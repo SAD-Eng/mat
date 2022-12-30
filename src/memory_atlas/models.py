@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Union
 from enum import IntEnum
+
 from . mat_types import BuiltInTypes, Range
 
 
@@ -33,7 +34,7 @@ class BomVariable:
 
     def validate(self):
         """TODO: Validate the BOM variable is valid."""
-        pass
+        print('TODO')
 
 
 @dataclass
