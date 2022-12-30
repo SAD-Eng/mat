@@ -4,7 +4,7 @@ from os import path
 
 from memory_atlas.models import SemVer, MemoryAtlas, BinaryObjectModel, BomVariable
 from memory_atlas.mat_json import MatJsonFile
-from memory_atlas.mat_types import PrimitiveType, Range
+from memory_atlas.mat_types import PrimitiveType, Range, AInt, UAInt, UFixed, SFixed
 
 
 def test_simple_atlas_serialize():
@@ -54,3 +54,32 @@ def test_simple_atlas_round_trip():
 
         assert bom.name == round_trip.boms[0].name
         assert var.name == round_trip.boms[0].variables[0].name
+
+
+def test_complex_types():
+    atlas = MemoryAtlas()
+    bom = BinaryObjectModel(name='foo', version=SemVer(3, 14, 15))
+    atlas.boms.append(bom)
+    aint_var = BomVariable(name='aint', description="Haz", var_type=AInt(8))
+    bom.variables.append(aint_var)
+    uaint_var = BomVariable(name='uaint', description="Haz", var_type=UAInt(16))
+    bom.variables.append(uaint_var)
+    ufixed_var = BomVariable(name='ufixed', description="Haz", var_type=UFixed(32, 24))
+    bom.variables.append(ufixed_var)
+    sfixed_var = BomVariable(name='sfixed', description="Haz", var_type=SFixed(64, 48))
+    bom.variables.append(sfixed_var)
+
+    file = MatJsonFile('unused.txt', atlas)
+    json_dict = json.loads(file.serialize())
+
+    def check_type(var_dict, type_class):
+        assert var_dict['var_type']['py/object'] == type_class.__module__ + '.' + type_class.__name__
+
+    assert len(json_dict['boms'][0]['variables']) == 4
+    assert json_dict['boms'][0]['variables'][0]['name'] == 'aint'
+    check_type(json_dict['boms'][0]['variables'][0], AInt)
+    check_type(json_dict['boms'][0]['variables'][1], UAInt)
+    check_type(json_dict['boms'][0]['variables'][2], UFixed)
+    assert json_dict['boms'][0]['variables'][2]['var_type']['int_bits'] == 32
+    assert json_dict['boms'][0]['variables'][2]['var_type']['frac_bits'] == 24
+    check_type(json_dict['boms'][0]['variables'][3], SFixed)
