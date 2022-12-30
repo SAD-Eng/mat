@@ -34,7 +34,7 @@ class BomVariable:
 
     def validate(self):
         """TODO: Validate the BOM variable is valid."""
-        pass
+        print('TODO')
 
 
 @dataclass
