@@ -11,6 +11,6 @@ pytest:
         paths:
             - allure_results
     before_script:
-        - pip install -r requirements.txt
+        - pip install .[dev]
     script:
         - pytest -v --alluredir=allure_results
