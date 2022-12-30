@@ -1,7 +1,5 @@
 = Memory Atlas Tooling
 
-image:https://gitlab.com/sad-eng/mat/badges/main/pipeline.svg[link="https://gitlab.com/sad-eng/mat/-/commits/main",title="pipeline status"]
-
 == Background
 
 This project provides modeling tools for a "Memory Atlas" model and file format
