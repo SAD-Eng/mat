@@ -6,10 +6,6 @@ stages:
 pytest:
     stage: test
     image: python:3.11-slim-buster
-    artifacts:
-        when: always
-        paths:
-            - allure_results
     before_script:
         - pip install .[dev]
     script:
