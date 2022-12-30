@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Union
 from enum import IntEnum
+
 from . mat_types import BuiltInTypes, Range
 
 
