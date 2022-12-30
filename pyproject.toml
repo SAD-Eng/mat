@@ -18,7 +18,10 @@ dependencies = [
 dynamic = ['version']
 
 [project.optional-dependencies]
-dev = ['pytest']
+dev = [
+    'pytest',
+    'pytest-cov',
+]
 
 [project.scripts]
 mat = 'memory_atlas.editor.__main__:main'
@@ -26,4 +29,5 @@ mat = 'memory_atlas.editor.__main__:main'
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
+    "--cov=memory_atlas",
 ]

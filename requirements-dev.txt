@@ -1,5 +1,6 @@
 attrs==22.1.0
 colorama==0.4.6
+coverage==7.0.1
 iniconfig==1.1.1
 jsonpickle==3.0.1
 packaging==22.0
@@ -8,4 +9,5 @@ PySide6==6.4.1
 PySide6-Addons==6.4.1
 PySide6-Essentials==6.4.1
 pytest==7.2.0
+pytest-cov==4.0.0
 shiboken6==6.4.1
