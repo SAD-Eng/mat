@@ -6,11 +6,12 @@ from memory_atlas.models import SemVer, MemoryAtlas, BinaryObjectModel, BomVaria
 from memory_atlas.mat_json import MatJsonFile
 from memory_atlas.mat_types import PrimitiveType, Range
 
+
 def test_simple_atlas_serialize():
     atlas = MemoryAtlas()
     bom = BinaryObjectModel(name='foo', version=SemVer(1, 0, 0))
     atlas.boms.append(bom)
-    var = BomVariable(name='bar', description="haz", var_type = PrimitiveType.STRING)
+    var = BomVariable(name='bar', description="haz", var_type=PrimitiveType.STRING)
     bom.variables.append(var)
 
     file = MatJsonFile('unused.txt', atlas)
@@ -26,7 +27,8 @@ def test_simple_atlas_serialize():
     assert bom_version['major'] == bom.version.major
     assert bom_version['minor'] == bom.version.minor
     assert bom_version['patch'] == bom.version.patch
-    
+
+
 def test_simple_atlas_round_trip():
     atlas = MemoryAtlas()
     bom = BinaryObjectModel(name='foo', version=SemVer(3,14,15))
@@ -37,6 +39,9 @@ def test_simple_atlas_round_trip():
     with tempfile.TemporaryDirectory() as tempdir_name:
         file = MatJsonFile(path.join(tempdir_name, 'test.mat.json'), atlas)
         file.save()
+        if False:
+            # set this to "True" and run pytest as `pytest -s` to get a chance to view the temp file
+            input(f'You can read {file.path} now, hit enter to continue...')
 
         with open(file.path, 'r') as json_file:
             json_dict = json.load(json_file)
