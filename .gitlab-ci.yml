@@ -11,6 +11,8 @@ pytest:
             coverage_report:
                 coverage_format: cobertura
                 path: coverage.xml
+    # coverage regex determines the percentage shown in the coverage badge on the project page
+    coverage: '/TOTAL.*\s+(\d+%)$/'
     before_script:
         - pip install .[dev]
     script:
