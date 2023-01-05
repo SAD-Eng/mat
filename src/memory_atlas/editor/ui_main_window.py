@@ -42,6 +42,8 @@ class Ui_MainWindow(object):
         self.actionNew.setObjectName(u"actionNew")
         self.actionOpen = QAction(self.menubar)
         self.actionOpen.setObjectName(u"actionOpen")
+        self.actionSave = QAction(self.menubar)
+        self.actionSave.setObjectName(u"actionSave")
         self.actionExit = QAction(self.menubar)
         self.actionExit.setObjectName(u"actionExit")
         self.fileMenu = QMenu(self.menubar)
@@ -51,11 +53,16 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        self.menubar.addAction(self.fileMenu.menuAction())
         self.fileMenu.addAction(self.actionNew)
         self.fileMenu.addAction(self.actionOpen)
+        self.fileMenu.addAction(self.actionSave)
+        self.fileMenu.addSeparator()
         self.fileMenu.addAction(self.actionExit)
 
         self.retranslateUi(MainWindow)
+        self.actionNew.triggered.connect(MainWindow.new)
+        self.actionOpen.triggered.connect(MainWindow.open)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -64,6 +71,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Memory Atlas Editor", None))
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"New", None))
         self.actionOpen.setText(QCoreApplication.translate("MainWindow", u"Open", None))
+        self.actionSave.setText(QCoreApplication.translate("MainWindow", u"Save", None))
         self.actionExit.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
         self.fileMenu.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi

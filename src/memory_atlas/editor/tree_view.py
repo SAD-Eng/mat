@@ -27,3 +27,12 @@ class AtlasTreeViewModel(QtCore.QAbstractItemModel):
             return self.atlas.boms[index.row()].name
         return
 
+    def index(self, row: int, column: int,
+              parent: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex] = ...) -> QtCore.QModelIndex:
+        if self.hasIndex(row, column, parent):
+            return self.createIndex(row, column, self.atlas.boms[row])
+        return QtCore.QModelIndex()
+
+    def parent(self, child: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex]) -> QtCore.QModelIndex:
+        # we are always the root of the tree, so we can return an empty index
+        return QtCore.QModelIndex()
