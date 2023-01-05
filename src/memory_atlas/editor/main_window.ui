@@ -16,12 +16,44 @@
     <widget class="QWidget">
       <layout class="QHBoxLayout">
         <item>
-          <widget class="QTreeView" name="atlasTree" />
+          <widget class="QTreeView" name="atlasTree"/>
         </item>
         <!-- TODO: Main details panel goes here -->
       </layout>
     </widget>
-    <widget class="QMenuBar" name="menubar" />
+    <widget class="QMenuBar" name="menubar">
+      <property name="geometry">
+        <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>200</width>
+          <height>30</height>
+        </rect>
+      </property>
+      <widget class="QMenu" name="fileMenu">
+        <property name="title">
+          <string>File</string>
+        </property>
+        <addaction name="actionNew"/>
+        <addaction name="actionOpen"/>
+        <addaction name="actionExit"/>
+      </widget>
+      <action name="actionNew">
+        <property name="text">
+          <string>New</string>
+        </property>
+      </action>
+      <action name="actionOpen">
+        <property name="text">
+          <string>Open</string>
+        </property>
+      </action>
+      <action name="actionExit">
+        <property name="text">
+          <string>Exit</string>
+        </property>
+      </action>
+    </widget>
     <widget class="QStatusBar" name="statusbar"/>
   </widget>
   <resources/>
