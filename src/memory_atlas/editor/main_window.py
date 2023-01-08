@@ -30,7 +30,7 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.Slot()
     def open(self):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, caption='Open MAT JSON File',
-                                                          filter='MAT JSON Files (*.mat.json)')
+                                                             filter='MAT JSON Files (*.mat.json)')
         file_obj = MatJsonFile(file_path)
         file_obj.load()
         self.atlas = file_obj.atlas

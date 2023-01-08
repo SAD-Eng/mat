@@ -69,17 +69,25 @@ def test_complex_types():
     sfixed_var = BomVariable(name='sfixed', description="Haz", var_type=SFixed(64, 48))
     bom.variables.append(sfixed_var)
 
-    file = MatJsonFile('unused.txt', atlas)
-    json_dict = json.loads(file.serialize())
+    with tempfile.TemporaryDirectory() as tempdir_name:
+        file = MatJsonFile(path.join(tempdir_name, 'test_complex_types.mat.json'), atlas)
+        if False:
+            file.save()
+            # set this to "True" and run pytest as `pytest -s` to get a chance to view the temp file
+            input(f'You can read {file.path} now, hit enter to continue...')
 
-    def check_type(var_dict, type_class):
-        assert var_dict['var_type']['py/object'] == type_class.__module__ + '.' + type_class.__name__
+        json_dict = json.loads(file.serialize())
 
-    assert len(json_dict['boms'][0]['variables']) == 4
-    assert json_dict['boms'][0]['variables'][0]['name'] == 'aint'
-    check_type(json_dict['boms'][0]['variables'][0], AInt)
-    check_type(json_dict['boms'][0]['variables'][1], UAInt)
-    check_type(json_dict['boms'][0]['variables'][2], UFixed)
-    assert json_dict['boms'][0]['variables'][2]['var_type']['int_bits'] == 32
-    assert json_dict['boms'][0]['variables'][2]['var_type']['frac_bits'] == 24
-    check_type(json_dict['boms'][0]['variables'][3], SFixed)
+        def check_type(var_dict, type_class):
+            assert var_dict['var_type']['py/object'] == type_class.__module__ + '.' + type_class.__name__
+
+        assert len(json_dict['boms'][0]['variables']) == 4
+        assert json_dict['boms'][0]['variables'][0]['name'] == 'aint'
+        check_type(json_dict['boms'][0]['variables'][0], AInt)
+        check_type(json_dict['boms'][0]['variables'][1], UAInt)
+        check_type(json_dict['boms'][0]['variables'][2], UFixed)
+        assert json_dict['boms'][0]['variables'][2]['var_type']['int_bits'] == 32
+        assert json_dict['boms'][0]['variables'][2]['var_type']['frac_bits'] == 24
+        check_type(json_dict['boms'][0]['variables'][3], SFixed)
+
+
