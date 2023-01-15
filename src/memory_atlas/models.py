@@ -18,6 +18,9 @@ class SemVer:
     minor : int = 0
     patch : int = 0
 
+    def __str__(self):
+        return f'{self.major}.{self.minor}.{self.patch}'
+
 
 @dataclass
 class BomVariable:

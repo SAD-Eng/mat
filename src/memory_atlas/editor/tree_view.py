@@ -3,6 +3,8 @@ This module contains ViewModel (aka 'Qt model') classes which implement the left
 editor. This uses the Qt Model/View where the .ui file has a QTreeView whose model is set to an instance
 of the AtlasTreeViewModel in this module. That view model then offers up other child view models which are also
 in this module.
+
+See https://doc.qt.io/qtforpython/overviews/qtwidgets-itemviews-simpletreemodel-example.html
 """
 from __future__ import annotations  # enable forward references in type hints https://stackoverflow.com/a/33844891
 
@@ -35,11 +37,11 @@ class AtlasTreeViewModelItemFactory:
         self._vm_cache = {}
 
     @classmethod
-    def register_type(cls, vm_type: AtlasTreeBaseViewModel, model_type):
+    def register_type(cls, vm_type: AtlasTreeItemViewModelBase, model_type):
         print(f'Registering vm_type {vm_type.__name__} for model_type {model_type.__name__}')
         cls._type_registry[model_type.__name__] = vm_type
 
-    def get_vm(self, model: Any, parent: AtlasTreeBaseViewModel):
+    def get_vm(self, model: Any, parent: AtlasTreeItemViewModelBase):
         if id(model) not in self._vm_cache:
             try:
                 vm_type = self._type_registry[type(model).__name__]
@@ -77,81 +79,93 @@ class atlas_tree_view_model:
         return WrapperClass
 
 
-class AtlasTreeBaseViewModel(QtCore.QAbstractItemModel):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self._parent_vm = parent  # in the case of AtlasTreeViewModel, this may be some Qt widget
+class AtlasTreeItemViewModelBase:
+    """Base class for tree view items - each class in memory_atlas.models will have an associated subclass"""
+    def __init__(self, parent_vm):
+        self.parent_vm = parent_vm  # in the case of the root MemoryAtlasTreeItemViewModel this will be null
 
     @abstractmethod
     def get_model(self) -> Any:
         """Child classes must override this to return their model instance"""
         pass
 
-    def vm_factory(self) -> AtlasTreeViewModelItemFactory:
-        """Returns the AtlasTreeViewModelItemFactory instance associated with this tree view"""
-        runner = self
-        while not hasattr(runner, 'factory'):
-            runner = runner._parent_vm
-        return runner.factory
+    @abstractmethod
+    def get_children(self) -> list:
+        """Child classes must override this to return a list of their child models"""
 
-    def columnCount(self, parent: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex] = ...) -> int:
-        return 1
+    @abstractmethod
+    def get_text(self) -> str:
+        """Child classes must override this to return the text string that should appear in the tree"""
 
 
-@atlas_tree_view_model(MemoryAtlas)
-class AtlasTreeViewModel(AtlasTreeBaseViewModel):
-    def __init__(self, atlas: MemoryAtlas, parent=None):
+class AtlasTreeViewModel(QtCore.QAbstractItemModel):
+    """
+    The tree view has this single implementation of QAbstractItemModel. This reduces complexity as the example
+    shows a single model handling generic tree nodes. In our case, the nodes
+    """
+    def __init__(self, atlas: MemoryAtlas, parent: QtCore.QObject):
+        # Note that "parent" here is a parent widget or other object, not related to the tree itself
         super().__init__(parent)
         self.atlas = atlas
         self.factory = AtlasTreeViewModelItemFactory()
+        self.atlas_vm = self.factory.get_vm(self.atlas, None)
+
+    def rowCount(self, parent: QtCore.QModelIndex = ...) -> int:
+        if not parent.isValid():
+            return 0
+        return len(parent.internalPointer().get_children())
+
+    def columnCount(self, parent: QtCore.QModelIndex = ...) -> int:
+        return 1
+
+    def data(self, index: QtCore.QModelIndex, role: int = ...) -> Any:
+        if role == QtCore.Qt.DisplayRole:
+            return index.internalPointer().get_text()
+        return
+
+    def index(self, row: int, column: int, parent: QtCore.QModelIndex = ...) -> QtCore.QModelIndex:
+        if self.hasIndex(row, column, parent):
+            child_model = parent.internalPointer().get_children()[row]
+            child_vm = self.factory.get_vm(child_model, self)
+            return self.createIndex(row, column, child_vm)
+        return QtCore.QModelIndex()
+
+    def parent(self, child: QtCore.QModelIndex = ...) -> QtCore.QModelIndex:
+        child_vm = child.internalPointer()
+        parent_vm = child_vm.parent_vm
+        if parent_vm is None:
+            return QtCore.QModelIndex()
+        row = parent_vm.get_children.index(child_vm.get_model())
+        return self.createIndex(row, 0, parent_vm)
+
+
+@atlas_tree_view_model(MemoryAtlas)
+class MemoryAtlasTreeItemViewModel(AtlasTreeItemViewModelBase):
+    def __init__(self, atlas: MemoryAtlas, parent_vm: AtlasTreeItemViewModelBase):
+        super().__init__(parent_vm)
+        self.atlas = atlas
 
     def get_model(self):
         return self.atlas
 
-    def rowCount(self, parent: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex] = ...) -> int:
-        return len(self.atlas.boms)
+    def get_children(self):
+        return self.atlas.boms
 
-    def data(self, index: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex], role: int = ...) -> Any:
-        if role == QtCore.Qt.DisplayRole:
-            return self.atlas.boms[index.row()].name
-        return
-
-    def index(self, row: int, column: int,
-              parent: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex] = ...) -> QtCore.QModelIndex:
-        if self.hasIndex(row, column, parent):
-            bom = self.atlas.boms[row]
-            return self.createIndex(row, column, self.vm_factory().get_vm(bom, self))
-        return QtCore.QModelIndex()
-
-    def parent(self, child: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex]) -> QtCore.QModelIndex:
-        # we are always the root of the tree, so we can return an empty index
-        return QtCore.QModelIndex()
+    def get_text(self) -> str:
+        return f'Memory Atlas {self.atlas.mat_version}'
 
 
 @atlas_tree_view_model(BinaryObjectModel)
-class BomTreeViewModel(AtlasTreeBaseViewModel):
-    def __init__(self, bom: BinaryObjectModel, parent: AtlasTreeBaseViewModel):
-        super().__init__(parent)
+class BinaryObjectModelTreeItemViewModel(AtlasTreeItemViewModelBase):
+    def __init__(self, bom: BinaryObjectModel, parent_vm: AtlasTreeItemViewModelBase):
+        super().__init__(parent_vm)
         self.bom = bom
 
     def get_model(self):
         return self.bom
 
-    def rowCount(self, parent: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex] = ...) -> int:
-        return len(self.bom.variables)
+    def get_children(self):
+        return self.bom.variables
 
-    def data(self, index: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex], role: int = ...) -> Any:
-        if role == QtCore.Qt.DisplayRole:
-            return self.bom.variables[index.row()].name
-        return
-
-    def index(self, row: int, column: int,
-              parent: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex] = ...) -> QtCore.QModelIndex:
-        if self.hasIndex(row, column, parent):
-            var = self.bom.variables[row]
-            return self.createIndex(row, column, self.vm_factory().get_vm(var, self))
-        return QtCore.QModelIndex()
-
-    def parent(self, child: Union[QtCore.QModelIndex, QtCore.QPersistentModelIndex]) -> QtCore.QModelIndex:
-        row = self._parent_vm.atlas.boms.index(self.bom)
-        return self.createIndex(row, 0, self._parent_vm)
+    def get_text(self) -> str:
+        return self.bom.name
