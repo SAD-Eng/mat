@@ -1,105 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Memory Atlas Editor</string>
-  </property>
-  <widget class="QWidget" name="widget">
-   <layout class="QHBoxLayout">
-    <item>
-     <widget class="QTreeView" name="atlasTree"/>
-    </item>
-   </layout>
+  <class>MainWindow</class>
+  <widget class="QMainWindow" name="MainWindow">
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>600</height>
+      </rect>
+    </property>
+    <property name="windowTitle">
+      <string>Memory Atlas Editor</string>
+    </property>
+    <widget class="QWidget" name="widget">
+      <layout class="QGridLayout" columnstretch="0,1">
+        <item row="0" column="0">
+          <widget class="QTreeView" name="atlasTree"/>
+        </item>
+        <item row="0" column="1">
+          <widget class="QStackedWidget" name="detailsPanelStack">
+            <widget class="QWidget" name="bomDetailPanel">
+              <layout class="QGridLayout">
+                <item row="0" column="0">
+                  <widget class="QLabel" name="label">
+                    <property name="text">
+                      <string>Name:</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+          </widget>
+        </item>
+      </layout>
+    </widget>
+    <widget class="QMenuBar" name="menubar">
+      <property name="geometry">
+        <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>800</width>
+          <height>22</height>
+        </rect>
+      </property>
+      <widget class="QMenu" name="fileMenu">
+        <property name="title">
+          <string>File</string>
+        </property>
+        <addaction name="actionNew"/>
+        <addaction name="actionOpen"/>
+        <addaction name="actionSave"/>
+        <addaction name="separator"/>
+        <addaction name="actionExit"/>
+      </widget>
+      <action name="actionNew">
+        <property name="text">
+          <string>New</string>
+        </property>
+      </action>
+      <action name="actionOpen">
+        <property name="text">
+          <string>Open</string>
+        </property>
+      </action>
+      <action name="actionSave">
+        <property name="text">
+          <string>Save</string>
+        </property>
+      </action>
+      <action name="actionExit">
+        <property name="text">
+          <string>Exit</string>
+        </property>
+      </action>
+      <addaction name="fileMenu"/>
+    </widget>
+    <widget class="QStatusBar" name="statusbar"/>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="fileMenu">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionNew"/>
-    <addaction name="actionOpen"/>
-    <addaction name="actionSave"/>
-    <addaction name="separator"/>
-    <addaction name="actionExit"/>
-   </widget>
-   <action name="actionNew">
-    <property name="text">
-     <string>New</string>
-    </property>
-   </action>
-   <action name="actionOpen">
-    <property name="text">
-     <string>Open</string>
-    </property>
-   </action>
-   <action name="actionSave">
-    <property name="text">
-     <string>Save</string>
-    </property>
-   </action>
-   <action name="actionExit">
-    <property name="text">
-     <string>Exit</string>
-    </property>
-   </action>
-   <addaction name="fileMenu"/>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
- </widget>
- <resources/>
- <connections>
-  <connection>
-   <sender>actionNew</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>new()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionOpen</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>open()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
- <slots>
-  <slot>new()</slot>
-  <slot>open()</slot>
- </slots>
+  <resources/>
+  <connections>
+    <connection>
+      <sender>actionNew</sender>
+      <signal>triggered()</signal>
+      <receiver>MainWindow</receiver>
+      <slot>new()</slot>
+    </connection>
+    <connection>
+      <sender>actionOpen</sender>
+      <signal>triggered()</signal>
+      <receiver>MainWindow</receiver>
+      <slot>open()</slot>
+    </connection>
+    <connection>
+      <sender>atlasTree</sender>
+      <signal>clicked(QModelIndex)</signal>
+      <receiver>MainWindow</receiver>
+      <slot>tree_selection_changed()</slot>
+    </connection>
+  </connections>
+  <slots>
+    <slot>new()</slot>
+    <slot>open()</slot>
+    <slot>tree_selection_changed()</slot>
+  </slots>
 </ui>

@@ -175,7 +175,7 @@ class BinaryObjectModelTreeItemViewModel(AtlasTreeItemViewModelBase):
         return self.bom.variables
 
     def get_text(self) -> str:
-        return self.bom.name
+        return f'BOM {self.bom.name}'
 
 
 @atlas_tree_view_model(BomVariable)
@@ -191,4 +191,4 @@ class BomVariableTreeItemViewModel(AtlasTreeItemViewModelBase):
         return []
 
     def get_text(self) -> str:
-        return self.var.name
+        return f'Variable {self.var.name}'

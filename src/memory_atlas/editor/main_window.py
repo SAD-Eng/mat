@@ -6,7 +6,7 @@ this class instantiates a ...tree_view.AtlasTreeViewModel and set it as the mode
 from PySide6 import QtWidgets, QtCore
 
 from .ui_main_window import Ui_MainWindow
-from .tree_view import AtlasTreeViewModel
+from .tree_view import AtlasTreeViewModel, BinaryObjectModelTreeItemViewModel
 from ..models import MemoryAtlas
 from ..mat_json import MatJsonFile
 
@@ -39,3 +39,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def _create_vm(self):
         self.tree_vm = AtlasTreeViewModel(self.atlas, self)
         self.ui.atlasTree.setModel(self.tree_vm)
+
+    @QtCore.Slot()
+    def tree_selection_changed(self, clicked: QtCore.QModelIndex):
+        selected_vm = clicked.internalPointer()
+        # TODO: Lookup of some kind
+        if isinstance(selected_vm, BinaryObjectModelTreeItemViewModel):
+            self.ui.detailsPanelStack.setCurrentWidget(self.ui.bomDetailPanel)
+            # TODO: Data binding to the details panel?
