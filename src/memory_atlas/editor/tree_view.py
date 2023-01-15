@@ -112,8 +112,10 @@ class AtlasTreeViewModel(QtCore.QAbstractItemModel):
 
     def rowCount(self, parent: QtCore.QModelIndex = ...) -> int:
         if not parent.isValid():
-            return 0
-        return len(parent.internalPointer().get_children())
+            children = self.atlas_vm.get_children()
+        else:
+            children = parent.internalPointer().get_children()
+        return len(children)
 
     def columnCount(self, parent: QtCore.QModelIndex = ...) -> int:
         return 1
@@ -125,8 +127,13 @@ class AtlasTreeViewModel(QtCore.QAbstractItemModel):
 
     def index(self, row: int, column: int, parent: QtCore.QModelIndex = ...) -> QtCore.QModelIndex:
         if self.hasIndex(row, column, parent):
-            child_model = parent.internalPointer().get_children()[row]
-            child_vm = self.factory.get_vm(child_model, self)
+            parent_vm = parent.internalPointer()
+            if parent_vm is None:
+                children = self.atlas_vm.get_children()
+            else:
+                children = parent_vm.get_children()
+            child_model = children[row]
+            child_vm = self.factory.get_vm(child_model, parent_vm)
             return self.createIndex(row, column, child_vm)
         return QtCore.QModelIndex()
 
@@ -135,7 +142,7 @@ class AtlasTreeViewModel(QtCore.QAbstractItemModel):
         parent_vm = child_vm.parent_vm
         if parent_vm is None:
             return QtCore.QModelIndex()
-        row = parent_vm.get_children.index(child_vm.get_model())
+        row = parent_vm.get_children().index(child_vm.get_model())
         return self.createIndex(row, 0, parent_vm)
 
 
@@ -169,3 +176,19 @@ class BinaryObjectModelTreeItemViewModel(AtlasTreeItemViewModelBase):
 
     def get_text(self) -> str:
         return self.bom.name
+
+
+@atlas_tree_view_model(BomVariable)
+class BomVariableTreeItemViewModel(AtlasTreeItemViewModelBase):
+    def __init__(self, var: BomVariable, parent_vm: AtlasTreeItemViewModelBase):
+        super().__init__(parent_vm)
+        self.var = var
+
+    def get_model(self):
+        return self.var
+
+    def get_children(self):
+        return []
+
+    def get_text(self) -> str:
+        return self.var.name
