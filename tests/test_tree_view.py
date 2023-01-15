@@ -4,7 +4,8 @@ from PySide6 import QtCore
 
 from memory_atlas.models import MemoryAtlas, BinaryObjectModel, SemVer
 from memory_atlas.mat_json import MatJsonFile
-from memory_atlas.editor.tree_view import AtlasTreeViewModel, BomTreeViewModel, AtlasTreeViewModelItemFactory
+from memory_atlas.editor.tree_view import AtlasTreeViewModelItemFactory, AtlasTreeViewModel, \
+    MemoryAtlasTreeItemViewModel, BinaryObjectModelTreeItemViewModel, BomVariableTreeItemViewModel
 
 project_dir = path.dirname(path.dirname(__file__))
 
@@ -16,21 +17,23 @@ def test_vm_factory():
 
     factory = AtlasTreeViewModelItemFactory()
     atlas_vm = factory.get_vm(atlas, None)
-    assert isinstance(atlas_vm, AtlasTreeViewModel)
+    assert isinstance(atlas_vm, MemoryAtlasTreeItemViewModel)
     bom_vm = factory.get_vm(bom, atlas_vm)
-    assert isinstance(bom_vm, BomTreeViewModel)
+    assert isinstance(bom_vm, BinaryObjectModelTreeItemViewModel)
 
 
-def test_atlas_boms():
+def test_tree_child_listing():
     file_obj = MatJsonFile(path.join(project_dir, 'examples/test.mat.json'))
     file_obj.load()
     atlas = file_obj.atlas
-    atlas_vm = AtlasTreeViewModel(atlas)
-    assert atlas_vm.get_model() == atlas
-    assert atlas_vm.rowCount() == 1
-    index = QtCore.QModelIndex()
-    index.row()
-    assert atlas_vm.data(atlas_vm.createIndex(0, 0), QtCore.Qt.DisplayRole) == atlas.boms[0].name
-    bom_vm_index = atlas_vm.index(0, 0, QtCore.QModelIndex())
-    bom = bom_vm_index.model()
-    assert isinstance(bom, BomTreeViewModel)
+    atlas_tree = AtlasTreeViewModel(atlas, None)
+
+    assert atlas_tree.rowCount(QtCore.QModelIndex()) == 1
+    bom_vm_index = atlas_tree.index(0, 0, QtCore.QModelIndex())
+    bom_vm = bom_vm_index.internalPointer()
+    assert isinstance(bom_vm, BinaryObjectModelTreeItemViewModel)
+
+    assert atlas_tree.rowCount(bom_vm_index) == 1
+    var_vm_index = atlas_tree.index(0, 0, bom_vm_index)
+    var_vm = var_vm_index.internalPointer()
+    assert isinstance(var_vm, BomVariableTreeItemViewModel)
