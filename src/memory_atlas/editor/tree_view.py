@@ -12,10 +12,10 @@ import functools
 from abc import abstractmethod
 from typing import Union, Any
 
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore
 
 from ..models import MemoryAtlas, BinaryObjectModel, BomVariable
-from .detail_panels import BomDetailPanel, BomVariableDetailPanel
+from .detail_panels import DetailPanel, BomDetailPanel, BomVariableDetailPanel
 
 
 class AtlasTreeViewModelItemFactory:
@@ -99,7 +99,7 @@ class AtlasTreeItemViewModelBase:
         """Child classes must override this to return the text string that should appear in the tree"""
 
     @abstractmethod
-    def get_detail_panel(self) -> QtWidgets.QWidget:
+    def get_detail_panel(self) -> DetailPanel:
         """Child classes must override this to return an instantiated detail panel widget for editing their model"""
 
 
@@ -168,7 +168,7 @@ class MemoryAtlasTreeItemViewModel(AtlasTreeItemViewModelBase):
     def get_text(self) -> str:
         return f'Memory Atlas {self.atlas.mat_version}'
 
-    def get_detail_panel(self) -> QtWidgets.QWidget:
+    def get_detail_panel(self) -> DetailPanel:
         raise NotImplementedError()
 
 
@@ -188,7 +188,7 @@ class BinaryObjectModelTreeItemViewModel(AtlasTreeItemViewModelBase):
     def get_text(self) -> str:
         return f'BOM {self.bom.name}'
 
-    def get_detail_panel(self) -> QtWidgets.QWidget:
+    def get_detail_panel(self) -> DetailPanel:
         return self.detail_panel
 
 
@@ -208,5 +208,5 @@ class BomVariableTreeItemViewModel(AtlasTreeItemViewModelBase):
     def get_text(self) -> str:
         return f'Variable {self.var.name}'
 
-    def get_detail_panel(self) -> QtWidgets.QWidget:
+    def get_detail_panel(self) -> DetailPanel:
         return self.detail_panel
