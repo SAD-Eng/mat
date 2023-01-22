@@ -12,9 +12,10 @@ import functools
 from abc import abstractmethod
 from typing import Union, Any
 
-from PySide6 import QtCore
+from PySide6 import QtCore, QtWidgets
 
 from ..models import MemoryAtlas, BinaryObjectModel, BomVariable
+from .detail_panels import BomDetailPanel, BomVariableDetailPanel
 
 
 class AtlasTreeViewModelItemFactory:
@@ -97,11 +98,17 @@ class AtlasTreeItemViewModelBase:
     def get_text(self) -> str:
         """Child classes must override this to return the text string that should appear in the tree"""
 
+    @abstractmethod
+    def get_detail_panel(self) -> QtWidgets.QWidget:
+        """Child classes must override this to return an instantiated detail panel widget for editing their model"""
+
 
 class AtlasTreeViewModel(QtCore.QAbstractItemModel):
     """
     The tree view has this single implementation of QAbstractItemModel. This reduces complexity as the example
-    shows a single model handling generic tree nodes. In our case, the nodes
+    shows a single model handling generic tree nodes. In our case the nodes are varied in type, but they are all
+    subclasses of the abstract AtlasTreeItemViewModelBase. The base class gives us a clear contract for what
+    each type of model needs to provide to be presented in the tree view.
     """
     def __init__(self, atlas: MemoryAtlas, parent: QtCore.QObject):
         # Note that "parent" here is a parent widget or other object, not related to the tree itself
@@ -161,12 +168,16 @@ class MemoryAtlasTreeItemViewModel(AtlasTreeItemViewModelBase):
     def get_text(self) -> str:
         return f'Memory Atlas {self.atlas.mat_version}'
 
+    def get_detail_panel(self) -> QtWidgets.QWidget:
+        raise NotImplementedError()
+
 
 @atlas_tree_view_model(BinaryObjectModel)
 class BinaryObjectModelTreeItemViewModel(AtlasTreeItemViewModelBase):
     def __init__(self, bom: BinaryObjectModel, parent_vm: AtlasTreeItemViewModelBase):
         super().__init__(parent_vm)
         self.bom = bom
+        self.detail_panel = BomDetailPanel(bom)
 
     def get_model(self):
         return self.bom
@@ -177,12 +188,16 @@ class BinaryObjectModelTreeItemViewModel(AtlasTreeItemViewModelBase):
     def get_text(self) -> str:
         return f'BOM {self.bom.name}'
 
+    def get_detail_panel(self) -> QtWidgets.QWidget:
+        return self.detail_panel
+
 
 @atlas_tree_view_model(BomVariable)
 class BomVariableTreeItemViewModel(AtlasTreeItemViewModelBase):
     def __init__(self, var: BomVariable, parent_vm: AtlasTreeItemViewModelBase):
         super().__init__(parent_vm)
         self.var = var
+        self.detail_panel = BomVariableDetailPanel(var)
 
     def get_model(self):
         return self.var
@@ -192,3 +207,6 @@ class BomVariableTreeItemViewModel(AtlasTreeItemViewModelBase):
 
     def get_text(self) -> str:
         return f'Variable {self.var.name}'
+
+    def get_detail_panel(self) -> QtWidgets.QWidget:
+        return self.detail_panel

@@ -16,9 +16,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
-    QMainWindow, QMenu, QMenuBar, QSizePolicy,
-    QStackedWidget, QStatusBar, QTreeView, QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QMainWindow,
+    QMenu, QMenuBar, QSizePolicy, QStackedWidget,
+    QStatusBar, QTreeView, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -36,16 +36,6 @@ class Ui_MainWindow(object):
 
         self.detailsPanelStack = QStackedWidget(self.widget)
         self.detailsPanelStack.setObjectName(u"detailsPanelStack")
-        self.bomDetailPanel = QWidget()
-        self.bomDetailPanel.setObjectName(u"bomDetailPanel")
-        self.gridLayout1 = QGridLayout(self.bomDetailPanel)
-        self.gridLayout1.setObjectName(u"gridLayout1")
-        self.label = QLabel(self.bomDetailPanel)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout1.addWidget(self.label, 0, 0, 1, 1)
-
-        self.detailsPanelStack.addWidget(self.bomDetailPanel)
 
         self.gridLayout.addWidget(self.detailsPanelStack, 0, 1, 1, 1)
 
@@ -79,6 +69,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.actionNew.triggered.connect(MainWindow.new)
         self.actionOpen.triggered.connect(MainWindow.open)
+        self.actionSave.triggered.connect(MainWindow.save)
+        self.actionExit.triggered.connect(MainWindow.exit)
         self.atlasTree.clicked.connect(MainWindow.tree_selection_changed)
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -86,7 +78,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Memory Atlas Editor", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Name:", None))
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"New", None))
         self.actionOpen.setText(QCoreApplication.translate("MainWindow", u"Open", None))
         self.actionSave.setText(QCoreApplication.translate("MainWindow", u"Save", None))

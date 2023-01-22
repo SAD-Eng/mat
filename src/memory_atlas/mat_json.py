@@ -18,16 +18,18 @@ class MatJsonFile:
 
     def serialize(self):
         """Returns a JSON string for the current MemoryAtlas object"""
-        return jsonpickle.encode(self.atlas)
+        return jsonpickle.encode(self.atlas, indent=4)
 
     def save(self):
-        with open(self.path, 'w') as f:
+        print(f'Saving MAT JSON to {self.path}')
+        with open(self.path, 'w', newline='\n') as f:
             f.write(self.serialize())
 
     def deserialize(self, json):
         self.atlas = jsonpickle.decode(json)
 
     def load(self):
+        print(f'Loading MAT JSON from {self.path}')
         with open(self.path, 'r') as f:
             json = f.read()
             self.deserialize(json)

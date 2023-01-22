@@ -19,19 +19,7 @@
           <widget class="QTreeView" name="atlasTree"/>
         </item>
         <item row="0" column="1">
-          <widget class="QStackedWidget" name="detailsPanelStack">
-            <widget class="QWidget" name="bomDetailPanel">
-              <layout class="QGridLayout">
-                <item row="0" column="0">
-                  <widget class="QLabel" name="label">
-                    <property name="text">
-                      <string>Name:</string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </widget>
-          </widget>
+          <widget class="QStackedWidget" name="detailsPanelStack"/>
         </item>
       </layout>
     </widget>
@@ -91,6 +79,18 @@
       <signal>triggered()</signal>
       <receiver>MainWindow</receiver>
       <slot>open()</slot>
+    </connection>
+    <connection>
+      <sender>actionSave</sender>
+      <signal>triggered()</signal>
+      <receiver>MainWindow</receiver>
+      <slot>save()</slot>
+    </connection>
+    <connection>
+      <sender>actionExit</sender>
+      <signal>triggered()</signal>
+      <receiver>MainWindow</receiver>
+      <slot>exit()</slot>
     </connection>
     <connection>
       <sender>atlasTree</sender>

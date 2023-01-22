@@ -20,6 +20,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # TODO: remember last open file, prompt for one on startup, etc.
         self.atlas = None
         self.tree_vm = None
+        self.file_obj = None
         self.new()
 
     @QtCore.Slot()
@@ -31,10 +32,19 @@ class MainWindow(QtWidgets.QMainWindow):
     def open(self):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, caption='Open MAT JSON File',
                                                              filter='MAT JSON Files (*.mat.json)')
-        file_obj = MatJsonFile(file_path)
-        file_obj.load()
-        self.atlas = file_obj.atlas
+        self.file_obj = MatJsonFile(file_path)
+        self.file_obj.load()
+        self.atlas = self.file_obj.atlas
         self._create_vm()
+
+    @QtCore.Slot()
+    def save(self):
+        if self.file_obj is not None:
+            self.file_obj.save()
+
+    @QtCore.Slot()
+    def exit(self):
+        self.close()
 
     def _create_vm(self):
         self.tree_vm = AtlasTreeViewModel(self.atlas, self)
@@ -43,7 +53,8 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.Slot()
     def tree_selection_changed(self, clicked: QtCore.QModelIndex):
         selected_vm = clicked.internalPointer()
-        # TODO: Lookup of some kind
-        if isinstance(selected_vm, BinaryObjectModelTreeItemViewModel):
-            self.ui.detailsPanelStack.setCurrentWidget(self.ui.bomDetailPanel)
-            # TODO: Data binding to the details panel?
+        detail_panel = selected_vm.get_detail_panel()
+        panel_index = self.ui.detailsPanelStack.indexOf(detail_panel)
+        if panel_index < 0:
+            panel_index = self.ui.detailsPanelStack.addWidget(detail_panel)
+        self.ui.detailsPanelStack.setCurrentIndex(panel_index)
