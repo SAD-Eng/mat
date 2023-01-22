@@ -1,0 +1,110 @@
+{
+  "py/object": "memory_atlas.models.MemoryAtlas",
+  "mat_version": {
+    "py/object": "memory_atlas.models.SemVer",
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  },
+  "boms": [
+    {
+      "py/object": "memory_atlas.models.BinaryObjectModel",
+      "name": "foo",
+      "description": "TBD",
+      "version": {
+        "py/object": "memory_atlas.models.SemVer",
+        "major": 3,
+        "minor": 14,
+        "patch": 15
+      },
+      "variables": [
+        {
+          "py/object": "memory_atlas.models.BomVariable",
+          "name": "aint",
+          "description": "Haz",
+          "var_type": {
+            "py/object": "memory_atlas.mat_types.complex.AInt",
+            "size": 8
+          },
+          "array": false,
+          "array_bound_type": {
+            "py/reduce": [
+              {
+                "py/function": "builtins.getattr"
+              },
+              {
+                "py/tuple": [
+                  {
+                    "py/type": "memory_atlas.models.ArrayBoundType"
+                  },
+                  "FIXED"
+                ]
+              }
+            ]
+          },
+          "var_array_bound": null,
+          "var_array_fixed": null,
+          "spare": false,
+          "reserved": false,
+          "range_constraint": null
+        },
+        {
+          "py/object": "memory_atlas.models.BomVariable",
+          "name": "uaint",
+          "description": "Haz",
+          "var_type": {
+            "py/object": "memory_atlas.mat_types.complex.UAInt",
+            "size": 16
+          },
+          "array": false,
+          "array_bound_type": {
+            "py/id": 8
+          },
+          "var_array_bound": null,
+          "var_array_fixed": null,
+          "spare": false,
+          "reserved": false,
+          "range_constraint": null
+        },
+        {
+          "py/object": "memory_atlas.models.BomVariable",
+          "name": "ufixed",
+          "description": "Haz",
+          "var_type": {
+            "py/object": "memory_atlas.mat_types.complex.UFixed",
+            "int_bits": 32,
+            "frac_bits": 24
+          },
+          "array": false,
+          "array_bound_type": {
+            "py/id": 8
+          },
+          "var_array_bound": null,
+          "var_array_fixed": null,
+          "spare": false,
+          "reserved": false,
+          "range_constraint": null
+        },
+        {
+          "py/object": "memory_atlas.models.BomVariable",
+          "name": "sfixed",
+          "description": "Haz",
+          "var_type": {
+            "py/object": "memory_atlas.mat_types.complex.SFixed",
+            "int_bits": 64,
+            "frac_bits": 48
+          },
+          "array": false,
+          "array_bound_type": {
+            "py/id": 8
+          },
+          "var_array_bound": null,
+          "var_array_fixed": null,
+          "spare": false,
+          "reserved": false,
+          "range_constraint": null
+        }
+      ]
+    }
+  ]
+}
