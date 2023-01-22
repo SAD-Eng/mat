@@ -61,12 +61,19 @@ class BomVariableDetailPanel(DetailPanel):
         super().__init__()
         self.var = var
 
-        name_edit = QtWidgets.QLineEdit()
-        description_edit = QtWidgets.QLineEdit()
+        self.name_edit = QtWidgets.QLineEdit()
+        self.name_edit.textEdited.connect(make_slot(self.var, 'name'))
+        self.description_edit = QtWidgets.QLineEdit()
+        self.description_edit.textEdited.connect(make_slot(self.var, 'description'))
         # TODO: variable types, swap out the editing controls based on selection
 
         form = QtWidgets.QFormLayout()
-        form.addRow('Name:', name_edit)
-        form.addRow('Description:', description_edit)
+        form.addRow('Name:', self.name_edit)
+        form.addRow('Description:', self.description_edit)
         self.setLayout(form)
 
+        self.model_to_view()
+
+    def model_to_view(self):
+        self.name_edit.setText(self.var.name)
+        self.description_edit.setText(self.var.description)
