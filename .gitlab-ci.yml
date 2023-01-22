@@ -14,7 +14,7 @@ pytest:
     # coverage regex determines the percentage shown in the coverage badge on the project page
     coverage: '/TOTAL.*\s+(\d+%)$/'
     before_script:
-        - apt install libgl1
+        - apt-get update && apt-get install libgl1
         - pip install .[dev]
     script:
         - pytest --cov-report term --cov-report xml:coverage.xml
