@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>content-save.svg</file>
+        <file>file-document-plus.svg</file>
+        <file>folder-open.svg</file>
+        <file>puzzle-plus.svg</file>
+        <file>variable-box.svg</file>
+    </qresource>
+</RCC>

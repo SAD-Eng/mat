@@ -1,0 +1,19 @@
+= Icons
+
+All icons are from the open source Material Design Icons pack from the
+Pictogrammers website: https://pictogrammers.com/library/mdi/.
+
+== Download Icon to SVG
+
+To add a new icon, browse the website and click on the icon you want.
+Click the "Copy SVG" <> icon. Create a new file in this directory and name
+it matching the website icon name, with .svg extension - paste in the
+SVG content, and save.
+
+== Use Icon in the GUI
+
+First, you must open icons.qrc in this directory and add your new icon
+file(s) to the list. Next, re-run src/memory_atlas/editor/compile_ui.sh
+to recompile the icons.qrc file into ui_icons.py. You can now reference
+your icon as with the other icons, i.e. `:/icons/<name>.svg`.
+

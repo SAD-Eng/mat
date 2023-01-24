@@ -16,7 +16,11 @@
     <widget class="QWidget" name="widget">
       <layout class="QGridLayout" columnstretch="0,1">
         <item row="0" column="0">
-          <widget class="QTreeView" name="atlasTree"/>
+          <widget class="QTreeView" name="atlasTree">
+            <property name="headerHidden">
+              <bool>true</bool>
+            </property>
+          </widget>
         </item>
         <item row="0" column="1">
           <widget class="QStackedWidget" name="detailsPanelStack"/>
@@ -42,19 +46,35 @@
         <addaction name="separator"/>
         <addaction name="actionExit"/>
       </widget>
+      <widget class="QMenu" name="addMenu">
+        <property name="title">
+          <string>Add</string>
+        </property>
+        <addaction name="actionAddBom"/>
+        <addaction name="actionAddBomVariable"/>
+      </widget>
       <action name="actionNew">
         <property name="text">
           <string>New</string>
+        </property>
+        <property name="icon">
+          <iconset>:/icons/file-document-plus.svg</iconset>
         </property>
       </action>
       <action name="actionOpen">
         <property name="text">
           <string>Open</string>
         </property>
+        <property name="icon">
+          <iconset>:/icons/folder-open.svg</iconset>
+        </property>
       </action>
       <action name="actionSave">
         <property name="text">
           <string>Save</string>
+        </property>
+        <property name="icon">
+          <iconset>:/icons/content-save.svg</iconset>
         </property>
       </action>
       <action name="actionExit">
@@ -63,6 +83,40 @@
         </property>
       </action>
       <addaction name="fileMenu"/>
+      <action name="actionAddBom">
+        <property name="text">
+          <string>Add BOM</string>
+        </property>
+        <property name="icon">
+          <iconset>:/icons/puzzle-plus.svg</iconset>
+        </property>
+      </action>
+      <action name="actionAddBomVariable">
+        <property name="text">
+          <string>Add Variable</string>
+        </property>
+        <property name="icon">
+          <iconset>:/icons/variable-box.svg</iconset>
+        </property>
+      </action>
+      <addaction name="addMenu"/>
+    </widget>
+    <widget class="QToolBar" name="toolBar">
+      <property name="windowTitle">
+        <string>toolBar</string>
+      </property>
+      <attribute name="toolBarArea">
+        <enum>TopToolBarArea</enum>
+      </attribute>
+      <attribute name="toolBarBreak">
+        <bool>false</bool>
+      </attribute>
+      <addaction name="actionNew"/>
+      <addaction name="actionOpen"/>
+      <addaction name="actionSave"/>
+      <addaction name="separator"/>
+      <addaction name="actionAddBom"/>
+      <addaction name="actionAddBomVariable"/>
     </widget>
     <widget class="QStatusBar" name="statusbar"/>
   </widget>
@@ -97,6 +151,18 @@
       <signal>clicked(QModelIndex)</signal>
       <receiver>MainWindow</receiver>
       <slot>tree_selection_changed()</slot>
+    </connection>
+    <connection>
+      <sender>actionAddBom</sender>
+      <signal>triggered()</signal>
+      <receiver>MainWindow</receiver>
+      <slot>add_bom()</slot>
+    </connection>
+    <connection>
+      <sender>actionAddBomVariable</sender>
+      <signal>triggered()</signal>
+      <receiver>MainWindow</receiver>
+      <slot>add_bom_variable()</slot>
     </connection>
   </connections>
   <slots>

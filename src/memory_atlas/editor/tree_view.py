@@ -39,7 +39,6 @@ class AtlasTreeViewModelItemFactory:
 
     @classmethod
     def register_type(cls, vm_type: AtlasTreeItemViewModelBase, model_type):
-        print(f'Registering vm_type {vm_type.__name__} for model_type {model_type.__name__}')
         cls._type_registry[model_type.__name__] = vm_type
 
     def get_vm(self, model: Any, parent: AtlasTreeItemViewModelBase):

@@ -6,9 +6,12 @@ this class instantiates a ...tree_view.AtlasTreeViewModel and set it as the mode
 from PySide6 import QtWidgets, QtCore
 
 from .ui_main_window import Ui_MainWindow
-from .tree_view import AtlasTreeViewModel, BinaryObjectModelTreeItemViewModel
-from ..models import MemoryAtlas
+import memory_atlas.editor.icons.ui_icons
+from .tree_view import AtlasTreeViewModel
+from ..models import MemoryAtlas, BinaryObjectModel, SemVer
 from ..mat_json import MatJsonFile
+
+NOTIFICATION_TIME = 2000  # in ms
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -36,11 +39,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.file_obj.load()
         self.atlas = self.file_obj.atlas
         self._create_vm()
+        self.ui.statusbar.showMessage(f'Loaded {file_path}', NOTIFICATION_TIME)
 
     @QtCore.Slot()
     def save(self):
         if self.file_obj is not None:
             self.file_obj.save()
+            self.ui.statusbar.showMessage(f'Saved {self.file_obj.path}', NOTIFICATION_TIME)
 
     @QtCore.Slot()
     def exit(self):
@@ -58,3 +63,13 @@ class MainWindow(QtWidgets.QMainWindow):
         if panel_index < 0:
             panel_index = self.ui.detailsPanelStack.addWidget(detail_panel)
         self.ui.detailsPanelStack.setCurrentIndex(panel_index)
+
+    @QtCore.Slot()
+    def add_bom(self):
+        # TODO: sequence numbers to make default names
+        self.atlas.boms.append(BinaryObjectModel(name='new', version=SemVer(1, 0, 0)))
+        self.tree_vm.layoutChanged.emit()
+
+    @QtCore.Slot()
+    def add_bom_variable(self):
+        pass  # TODO: Add to selected BOM, or after selected variable, or disable action if not valid?
