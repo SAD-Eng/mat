@@ -21,6 +21,7 @@ dynamic = ['version']
 dev = [
     'pytest',
     'pytest-cov',
+    'pytest-qt',
 ]
 
 [project.scripts]

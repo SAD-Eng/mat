@@ -10,7 +10,7 @@ from memory_atlas.editor.tree_view import AtlasTreeViewModelItemFactory, AtlasTr
 project_dir = path.dirname(path.dirname(__file__))
 
 
-def test_vm_factory():
+def test_vm_factory(qtbot):
     atlas = MemoryAtlas(SemVer(0, 0, 0))
     bom = BinaryObjectModel("foo", "desc", SemVer(0, 0, 0))
     atlas.boms.append(bom)
@@ -22,7 +22,7 @@ def test_vm_factory():
     assert isinstance(bom_vm, BinaryObjectModelTreeItemViewModel)
 
 
-def test_tree_child_listing():
+def test_tree_child_listing(qtbot):
     file_obj = MatJsonFile(path.join(project_dir, 'examples/test.mat.json'))
     file_obj.load()
     atlas = file_obj.atlas

@@ -72,4 +72,5 @@ class MainWindow(QtWidgets.QMainWindow):
 
     @QtCore.Slot()
     def add_bom_variable(self):
-        pass  # TODO: Add to selected BOM, or after selected variable, or disable action if not valid?
+        # TODO: sequence numbers to make default names
+        selected_vm = clicked.internalPointer()
