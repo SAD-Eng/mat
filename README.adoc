@@ -17,9 +17,9 @@ include Ethernet packets (e.g. TCP/IP or UDP/IP) and binary files on disk.
 
 This project does not claim to be novel, in fact tools and file formats for
 modeling binary data proliferates. For example, arbitrary binary data can be
-modeled with https://en.wikipedia
-.org/wiki/Data_Format_Description_Language[DFDL]. Memory maps can be described
-with https://www.keil.com/pack/doc/CMSIS/SVD/html/index.html[CMSIS SVD].
+modeled with https://en.wikipedia.org/wiki/Data_Format_Description_Language[DFDL]. 
+Memory maps can be described with 
+https://www.keil.com/pack/doc/CMSIS/SVD/html/index.html[CMSIS SVD].
 These are just two of dozens of formats. However, many existing modeling
 languages are either tightly coupled with a particular technology.
 
